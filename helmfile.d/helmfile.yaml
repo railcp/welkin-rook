@@ -111,3 +111,10 @@ releases:
       - rook-ceph/rook-ceph-cluster
     values:
       - values/toolbox.yaml.gotmpl
+
+  - name: rook-extra-manifests
+    namespace: rook-ceph
+    installed: {{ .Values | get "enableExtraManifests" false }}
+    labels:
+      app: extra-manifests
+    chart: {{ requiredEnv "CK8S_CONFIG_PATH"}}/rook/manifests-{{ .Environment.Name }}

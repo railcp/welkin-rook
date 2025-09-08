@@ -195,6 +195,10 @@ clusters:
       nodePeers: []
 
   workload:
+    ## If enabled, arbitrary manifests can placed in a folder config/rook/manifests-workload. A typical usecase
+    ## would be to create more pools, storageclasses and filesystems. There are many good examples here:
+    ## https://github.com/rook/rook/tree/master/deploy/examples
+    # enableExtraManifests: false
     monitoring:
       # Requires Prometheus operator from apps!
       # Enable after apps is installed!
