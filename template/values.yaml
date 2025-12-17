@@ -1,5 +1,7 @@
 # Values shared with all clusters
 commons:
+  rook:
+    major: 1.14
   podSecurityPolicies:
     # Requires Gatekeeper PodSecurityPolicies templates from apps!
     # Enable after apps is installed!

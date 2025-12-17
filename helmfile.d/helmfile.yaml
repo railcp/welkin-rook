@@ -58,8 +58,7 @@ releases:
     labels:
       app: operator
       stage: bootstrap
-    chart: ./upstream/rook-ceph
-    version: v1.14.4
+    chart: ./upstream/{{ .Values.rook.major }}/rook-ceph
     disableValidationOnInstall: true
     needs:
       - kube-system/rook-ceph-namespace
@@ -71,8 +70,7 @@ releases:
     labels:
       app: cluster
       stage: bootstrap
-    chart: ./upstream/rook-ceph-cluster
-    version: v1.14.4
+    chart: ./upstream/{{ .Values.rook.major }}/rook-ceph-cluster
     disableValidationOnInstall: true
     needs:
       - kube-system/rook-ceph-namespace
