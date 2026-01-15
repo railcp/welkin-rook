@@ -117,14 +117,28 @@ function testMgrs {
 }
 
 function setExpectedResources {
+  cluster=$1
   DEPLOYMENTS=(
-    "csi-rbdplugin-provisioner"
     "rook-ceph-operator"
     "rook-ceph-toolbox"
   )
-  DAEMONSETS=(
-    "csi-rbdplugin"
-  )
+  DEMONSETS=()
+  version=$(get_merged_key ${cluster} ".rook.major")
+  # gnu sort checks if the input is sorted, which it is if the user specified >= 1.18
+  if [[ $version != "null" ]] && printf '%s\n%s' 1.18 $version | sort --version-sort --check=silent
+  then
+    DAEMONSETS+=("rook-ceph.rbd.csi.ceph.com-nodeplugin")
+    DEPLOYMENTS+=("rook-ceph.rbd.csi.ceph.com-ctrlplugin")
+    if [[ $(get_merged_key ${cluster} ".csi.enableCephfsDriver") == "true" ]];
+    then
+      DAEMONSETS+=("rook-ceph.cephfs.csi.ceph.com-nodeplugin")
+      DEPLOYMENTS+=("rook-ceph.cephfs.csi.ceph.com-ctrlplugin")
+    fi
+
+  else
+    DAEMONSETS+=("csi-rbdplugin")
+    DEPLOYMENTS+=("csi-rbdplugin-provisioner")
+  fi
   CEPHCLUSTERS=(
     "rook-ceph"
   )
@@ -172,7 +186,7 @@ function test_rook() {
     DAEMONSETS=()
     JOBS=()
     CEPHCLUSTERS=()
-    setExpectedResources
+    setExpectedResources ${cluster}
 
     echo
     echo "Testing rook-ceph in ${cluster}.."

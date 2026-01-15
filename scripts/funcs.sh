@@ -375,3 +375,15 @@ append_trap() {
   # shellcheck disable=SC2064
   trap "$(new_trap)" "${signal}"
 }
+
+function get_merged_key() {
+  cluster=$1
+  key=$2
+  CONFIG_FILE="${CK8S_CONFIG_PATH}/rook/values.yaml"
+  if [[ $cluster == "wc" ]];
+  then
+    yq ".commons * .clusters.workload | $key" $CONFIG_FILE
+  else
+    yq ".commons * .clusters.service | $key" $CONFIG_FILE
+  fi
+}
