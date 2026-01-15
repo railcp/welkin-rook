@@ -288,6 +288,16 @@ policies:
         - rule: egress-rule-mds
         - rule: egress-rule-osd
 
+    cephfs-csi-ctrlplugin:
+      podSelectorLabels:
+        app: rook-ceph.cephfs.csi.ceph.com-ctrlplugin
+      egress:
+        - rule: egress-rule-apiserver
+        - rule: egress-rule-mgr
+        - rule: egress-rule-mon
+        - rule: egress-rule-mds
+        - rule: egress-rule-osd
+
     ceph-file-controller-detect-version:
       podSelectorLabels:
         app: ceph-file-controller-detect-version
@@ -326,3 +336,22 @@ policies:
             - tcp: 6800
               end: 7568
     {{- end }}
+
+    ceph-csi-operator:
+      podSelectorLabels:
+        control-plane: ceph-csi-op-controller-manager
+      egress:
+        - rule: egress-rule-dns
+        - rule: egress-rule-apiserver
+      ingress:
+        - rule: ingress-rule-prometheus
+
+    rbd-ceph-ctrlplugin:
+      podSelectorLabels:
+        app: rook-ceph.rbd.csi.ceph.com-ctrlplugin
+      egress:
+        - rule: egress-rule-dns
+        - rule: egress-rule-apiserver
+        - rule: egress-rule-mgr
+        - rule: egress-rule-mon
+        - rule: egress-rule-osd

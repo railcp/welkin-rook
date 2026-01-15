@@ -24,7 +24,7 @@ constraints:
         runAsUser: 2016
         fsGroup: 2016
 
-    csi-rbdplugin-provisioner:
+    csi-rbdplugin-provisioner: &csi-rbdplugin-provisioner
       podSelectorLabels:
         app: csi-rbdplugin-provisioner
       allow:
@@ -48,7 +48,7 @@ constraints:
       mutation:
         dropAllCapabilities: false
 
-    csi-rbdplugin:
+    csi-rbdplugin: &csi-rbdplugin
       podSelectorLabels:
         app: csi-rbdplugin
       allow:
@@ -81,6 +81,16 @@ constraints:
           rule: RunAsAny
       mutation:
         dropAllCapabilities: false
+
+    rbd-ceph-ctrlplugin:
+      <<: *csi-rbdplugin-provisioner
+      podSelectorLabels:
+        app: rook-ceph.rbd.csi.ceph.com-ctrlplugin
+
+    rbd-ceph-nodeplugin:
+      <<: *csi-rbdplugin
+      podSelectorLabels:
+        app: rook-ceph.rbd.csi.ceph.com-nodeplugin
 
     crashcollector:
       podSelectorLabels:
@@ -256,7 +266,7 @@ constraints:
         runAsUser: 2016
         fsGroup: 2016
 
-    csi-cephfsplugin-provisioner:
+    csi-cephfsplugin-provisioner: &csi-cephfsplugin-provisioner
       podSelectorLabels:
         app: csi-cephfsplugin-provisioner
       allow:
@@ -280,7 +290,12 @@ constraints:
       mutation:
         dropAllCapabilities: false
 
-    csi-cephfsplugin:
+    cephfs-csi-ctrlplugin:
+      <<: *csi-cephfsplugin-provisioner
+      podSelectorLabels:
+        app: rook-ceph.cephfs.csi.ceph.com-ctrlplugin
+
+    csi-cephfsplugin: &csi-cephfsplugin
       podSelectorLabels:
         app: csi-cephfsplugin
       allow:
@@ -313,6 +328,11 @@ constraints:
           rule: RunAsAny
       mutation:
         dropAllCapabilities: false
+
+    cephfs-csi-nodeplugin:
+      <<: *csi-cephfsplugin
+      podSelectorLabels:
+        app: rook-ceph.cephfs.csi.ceph.com-nodeplugin
 
     mds:
       podSelectorLabels:
